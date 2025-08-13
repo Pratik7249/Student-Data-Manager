@@ -1,0 +1,100 @@
+.App {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form styling */
+.form-section {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background: #f9f9f9;
+}
+
+.form-section div {
+  margin-bottom: 10px;
+}
+
+label {
+  display: inline-block;
+  width: 120px;
+}
+
+input, select {
+  padding: 5px;
+  width: 200px;
+}
+
+.error {
+  display: block;
+  color: red;
+  font-size: 0.85em;
+  margin-top: 3px;
+}
+
+.form-buttons {
+  margin-top: 10px;
+}
+
+.form-buttons button {
+  margin-right: 8px;
+  padding: 5px 10px;
+}
+
+/* Search & Sort section */
+.search-sort-section {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.search-sort-section input,
+.search-sort-section select {
+  padding: 5px;
+}
+
+.search-sort-section button {
+  padding: 5px 10px;
+}
+
+/* Table styling */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-table th, .student-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.student-table th {
+  background-color: #f0f0f0;
+}
+
+.student-table button {
+  margin-right: 5px;
+  padding: 3px 8px;
+  font-size: 0.9em;
+}
+
+/* Tests & messages */
+.tests-section {
+  margin-top: 20px;
+}
+
+.message {
+  margin-top: 10px;
+  font-weight: bold;
+  color: green;
+}
