@@ -2,6 +2,10 @@
 
 A simple React-based web application to manage student records — add, edit, delete, search, and display student data with a clean Material UI interface and light/dark mode toggle.
 
+## Live Link 
+
+https://student-data-manager-omega.vercel.app/
+
 ## Features
 
 ### 1) Add / Edit Student
