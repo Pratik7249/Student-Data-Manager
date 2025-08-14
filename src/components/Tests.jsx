@@ -3,9 +3,7 @@ import { Button } from "@mui/material";
 import { normalizeName, isFuzzyMatch } from "../utils/helpers";
 
 export default function Tests({ setMessage }) {
-  /** 
-   * Run a small set of checks to make sure our helper functions behave correctly.
-   */
+
   const runAllChecks = () => {
     try {
       console.assert(normalizeName("José") === "jose", "Expected José → jose");

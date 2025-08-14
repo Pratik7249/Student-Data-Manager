@@ -1,19 +1,17 @@
-// Remove accents + lowercase
+
 export function normalizeName(s) {
   return s
-    .normalize('NFD') // separate accents from characters
-    .replace(/[\u0300-\u036f]/g, '') // remove accents
+    .normalize('NFD') 
+    .replace(/[\u0300-\u036f]/g, '') 
     .toLowerCase();
 }
 
-// Fuzzy match allowing 1 edit (insert/delete/replace)
 export function isFuzzyMatch(a, b) {
   a = normalizeName(a);
   b = normalizeName(b);
 
   if (a === b) return true;
 
-  // Quick length check
   if (Math.abs(a.length - b.length) > 1) return false;
 
   let i = 0, j = 0, edits = 0;

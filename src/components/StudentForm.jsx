@@ -8,10 +8,7 @@ import {
   Paper
 } from "@mui/material";
 
-/**
- * StudentForm handles adding and editing student records
- * with validation for roll uniqueness, required fields, and CGPA range.
- */
+
 export default function StudentForm({
   onSave,
   editingStudent,
@@ -30,7 +27,6 @@ export default function StudentForm({
   const DEPARTMENTS = ["CSE", "ECE", "ME", "CE", "EE"];
   const YEARS = ["1", "2", "3", "4"];
 
-  // Populate form when editing, reset when cleared
   useEffect(() => {
     if (editingStudent) {
       setFormData(editingStudent);
@@ -52,7 +48,6 @@ export default function StudentForm({
     const { roll, name, dept, year, cgpa } = formData;
     const newErrors = {};
 
-    // Roll validation
     if (!roll.trim()) {
       newErrors.roll = "Roll number is required";
     } else {
@@ -62,14 +57,11 @@ export default function StudentForm({
       if (duplicate) newErrors.roll = "Roll number must be unique";
     }
 
-    // Name validation
     if (!name.trim()) newErrors.name = "Name is required";
 
-    // Dropdown validations
     if (!dept) newErrors.dept = "Department is required";
     if (!year) newErrors.year = "Year is required";
 
-    // CGPA validation
     if (cgpa === "") {
       newErrors.cgpa = "CGPA is required";
     } else if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
@@ -104,7 +96,6 @@ export default function StudentForm({
       </Typography>
 
       <Stack spacing={2}>
-        {/* Roll Number */}
         <TextField
           label="Roll Number"
           value={formData.roll}
@@ -114,7 +105,6 @@ export default function StudentForm({
           fullWidth
         />
 
-        {/* Name */}
         <TextField
           label="Name"
           value={formData.name}
@@ -124,7 +114,6 @@ export default function StudentForm({
           fullWidth
         />
 
-        {/* Department */}
         <TextField
           select
           label="Department"
@@ -144,7 +133,6 @@ export default function StudentForm({
           ))}
         </TextField>
 
-        {/* Year */}
         <TextField
           select
           label="Year"
@@ -164,7 +152,6 @@ export default function StudentForm({
           ))}
         </TextField>
 
-        {/* CGPA */}
         <TextField
           label="CGPA"
           type="number"
@@ -176,7 +163,6 @@ export default function StudentForm({
           fullWidth
         />
 
-        {/* Action Buttons */}
         <Stack direction="row" spacing={2}>
           <Button variant="contained" color="primary" type="submit">
             {editingStudent ? "Update" : "Save"}

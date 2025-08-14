@@ -9,10 +9,6 @@ import {
 } from "@mui/material";
 import { SortByAlpha, TrendingUp, Clear } from "@mui/icons-material";
 
-/**
- * Search, filter, and sorting controls for the student list.
- * Keeps its own sort state, but passes updates up via props.
- */
 export default function SearchAndSort({
   searchQuery,
   onSearchChange,
@@ -26,7 +22,6 @@ export default function SearchAndSort({
   const DEPARTMENTS = ["CSE", "ECE", "ME", "CE", "EE"];
   const YEARS = ["1", "2", "3", "4"];
 
-  // Local sort settings so UI knows which icon to highlight
   const [sortSettings, setSortSettings] = useState({ field: "", direction: "asc" });
 
   const handleSortToggle = (field) => {
@@ -60,7 +55,6 @@ export default function SearchAndSort({
       component="form"
       onSubmit={(e) => e.preventDefault()}
     >
-      {/* Search field */}
       <TextField
         label="Search by Roll or Name"
         value={searchQuery}
@@ -69,7 +63,6 @@ export default function SearchAndSort({
         fullWidth
       />
 
-      {/* Department filter */}
       <TextField
         select
         label="Department"
@@ -86,7 +79,6 @@ export default function SearchAndSort({
         ))}
       </TextField>
 
-      {/* Year filter */}
       <TextField
         select
         label="Year"
@@ -103,7 +95,6 @@ export default function SearchAndSort({
         ))}
       </TextField>
 
-      {/* Sort by CGPA */}
       <Tooltip title="Sort by CGPA">
         <IconButton
           color={sortSettings.field === "cgpa" ? "primary" : "default"}
@@ -121,7 +112,6 @@ export default function SearchAndSort({
         </IconButton>
       </Tooltip>
 
-      {/* Sort by Name */}
       <Tooltip title="Sort by Name">
         <IconButton
           color={sortSettings.field === "name" ? "primary" : "default"}
@@ -139,7 +129,6 @@ export default function SearchAndSort({
         </IconButton>
       </Tooltip>
 
-      {/* Clear everything */}
       <Tooltip title="Clear all filters and sorting">
         <IconButton onClick={resetAll}>
           <Clear />

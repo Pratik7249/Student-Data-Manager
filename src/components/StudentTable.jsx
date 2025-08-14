@@ -15,9 +15,6 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-/**
- * Displays the list of students in a scrollable, styled table
- */
 export default function StudentTable({ students, onEdit, onDelete }) {
   const theme = useTheme();
 
