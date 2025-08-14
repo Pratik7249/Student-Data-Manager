@@ -1,37 +1,106 @@
 import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Typography,
+  Box,
+  useTheme
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
+/**
+ * Displays the list of students in a scrollable, styled table
+ */
 export default function StudentTable({ students, onEdit, onDelete }) {
-  if (students.length === 0) {
-    return <p>No students found.</p>;
-  }
+  const theme = useTheme();
+
+  const HEADERS = ["Roll", "Name", "Department", "Year", "CGPA", "Actions"];
 
   return (
-    <table className="student-table">
-      <thead>
-        <tr>
-          <th>Roll</th>
-          <th>Name</th>
-          <th>Department</th>
-          <th>Year</th>
-          <th>CGPA</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {students.map((student) => (
-          <tr key={student.roll}>
-            <td>{student.roll}</td>
-            <td>{student.name}</td>
-            <td>{student.dept}</td>
-            <td>{student.year}</td>
-            <td>{student.cgpa}</td>
-            <td>
-              <button onClick={() => onEdit(student)}>Edit</button>
-              <button onClick={() => onDelete(student.roll)}>Delete</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Box sx={{ mb: 3 }}>
+      <Typography variant="h6" gutterBottom>
+        Student List
+      </Typography>
+
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxHeight: 400,
+          borderRadius: 2,
+          overflow: "auto"
+        }}
+      >
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {HEADERS.map((title) => (
+                <TableCell
+                  key={title}
+                  sx={{
+                    fontWeight: "bold",
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.primary.contrastText
+                  }}
+                >
+                  {title}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {students.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={HEADERS.length} align="center">
+                  No students found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              students.map((student, index) => (
+                <TableRow
+                  key={student.roll}
+                  sx={{
+                    backgroundColor:
+                      index % 2
+                        ? theme.palette.background.default
+                        : theme.palette.action.hover,
+                    "&:hover": { backgroundColor: theme.palette.action.selected }
+                  }}
+                >
+                  <TableCell>{student.roll}</TableCell>
+                  <TableCell>{student.name}</TableCell>
+                  <TableCell>{student.dept}</TableCell>
+                  <TableCell>{student.year}</TableCell>
+                  <TableCell>{student.cgpa}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      aria-label="edit"
+                      color="primary"
+                      onClick={() => onEdit(student)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      color="error"
+                      onClick={() => onDelete(student.roll)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

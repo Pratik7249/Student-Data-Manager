@@ -1,6 +1,23 @@
 import React, { useState, useEffect } from "react";
+import {
+  TextField,
+  MenuItem,
+  Button,
+  Stack,
+  Typography,
+  Paper
+} from "@mui/material";
 
-export default function StudentForm({ onSave, editingStudent, onClear, students }) {
+/**
+ * StudentForm handles adding and editing student records
+ * with validation for roll uniqueness, required fields, and CGPA range.
+ */
+export default function StudentForm({
+  onSave,
+  editingStudent,
+  onClear,
+  students
+}) {
   const [formData, setFormData] = useState({
     roll: "",
     name: "",
@@ -10,38 +27,54 @@ export default function StudentForm({ onSave, editingStudent, onClear, students 
   });
   const [errors, setErrors] = useState({});
 
-  // Load form data when editing
+  const DEPARTMENTS = ["CSE", "ECE", "ME", "CE", "EE"];
+  const YEARS = ["1", "2", "3", "4"];
+
+  // Populate form when editing, reset when cleared
   useEffect(() => {
     if (editingStudent) {
       setFormData(editingStudent);
+    } else {
+      resetForm();
     }
   }, [editingStudent]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const resetForm = () => {
+    setFormData({ roll: "", name: "", dept: "", year: "", cgpa: "" });
+    setErrors({});
+  };
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const validate = () => {
-    const newErrors = {};
     const { roll, name, dept, year, cgpa } = formData;
+    const newErrors = {};
 
-    if (!roll) newErrors.roll = "Roll number is required";
-    else {
-      // Unique roll check (except when editing same record)
+    // Roll validation
+    if (!roll.trim()) {
+      newErrors.roll = "Roll number is required";
+    } else {
       const duplicate = students.find(
         (s) => s.roll === roll && (!editingStudent || s.roll !== editingStudent.roll)
       );
       if (duplicate) newErrors.roll = "Roll number must be unique";
     }
 
-    if (!name) newErrors.name = "Name is required";
+    // Name validation
+    if (!name.trim()) newErrors.name = "Name is required";
+
+    // Dropdown validations
     if (!dept) newErrors.dept = "Department is required";
     if (!year) newErrors.year = "Year is required";
 
-    if (cgpa === "") newErrors.cgpa = "CGPA is required";
-    else if (isNaN(cgpa) || cgpa < 0 || cgpa > 10)
+    // CGPA validation
+    if (cgpa === "") {
+      newErrors.cgpa = "CGPA is required";
+    } else if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
       newErrors.cgpa = "CGPA must be between 0 and 10";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -51,93 +84,108 @@ export default function StudentForm({ onSave, editingStudent, onClear, students 
     e.preventDefault();
     if (!validate()) return;
     onSave({ ...formData, cgpa: parseFloat(formData.cgpa) });
-    setFormData({ roll: "", name: "", dept: "", year: "", cgpa: "" });
+    resetForm();
   };
 
   const handleClear = () => {
-    setFormData({ roll: "", name: "", dept: "", year: "", cgpa: "" });
-    setErrors({});
+    resetForm();
     onClear();
   };
 
   return (
-    <form onSubmit={handleSave} className="form-section">
-      <h2>{editingStudent ? "Edit Student" : "Add Student"}</h2>
+    <Paper
+      component="form"
+      onSubmit={handleSave}
+      sx={{ p: 3, mb: 3 }}
+      elevation={3}
+    >
+      <Typography variant="h6" gutterBottom>
+        {editingStudent ? "Edit Student" : "Add Student"}
+      </Typography>
 
-      <div>
-        <label htmlFor="roll">Roll Number:</label>
-        <input
-          id="roll"
-          name="roll"
+      <Stack spacing={2}>
+        {/* Roll Number */}
+        <TextField
+          label="Roll Number"
           value={formData.roll}
-          onChange={handleChange}
+          onChange={(e) => handleChange("roll", e.target.value)}
+          error={!!errors.roll}
+          helperText={errors.roll}
+          fullWidth
         />
-        {errors.roll && <span className="error">{errors.roll}</span>}
-      </div>
 
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          id="name"
-          name="name"
+        {/* Name */}
+        <TextField
+          label="Name"
           value={formData.name}
-          onChange={handleChange}
+          onChange={(e) => handleChange("name", e.target.value)}
+          error={!!errors.name}
+          helperText={errors.name}
+          fullWidth
         />
-        {errors.name && <span className="error">{errors.name}</span>}
-      </div>
 
-      <div>
-        <label htmlFor="dept">Department:</label>
-        <select
-          id="dept"
-          name="dept"
+        {/* Department */}
+        <TextField
+          select
+          label="Department"
           value={formData.dept}
-          onChange={handleChange}
+          onChange={(e) => handleChange("dept", e.target.value)}
+          error={!!errors.dept}
+          helperText={errors.dept}
+          fullWidth
         >
-          <option value="">--Select--</option>
-          <option value="CSE">CSE</option>
-          <option value="ECE">ECE</option>
-          <option value="ME">ME</option>
-          <option value="CE">CE</option>
-          <option value="EE">EE</option>
-        </select>
-        {errors.dept && <span className="error">{errors.dept}</span>}
-      </div>
+          <MenuItem value="">
+            <em>--Select--</em>
+          </MenuItem>
+          {DEPARTMENTS.map((dept) => (
+            <MenuItem key={dept} value={dept}>
+              {dept}
+            </MenuItem>
+          ))}
+        </TextField>
 
-      <div>
-        <label htmlFor="year">Year:</label>
-        <select
-          id="year"
-          name="year"
+        {/* Year */}
+        <TextField
+          select
+          label="Year"
           value={formData.year}
-          onChange={handleChange}
+          onChange={(e) => handleChange("year", e.target.value)}
+          error={!!errors.year}
+          helperText={errors.year}
+          fullWidth
         >
-          <option value="">--Select--</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-        {errors.year && <span className="error">{errors.year}</span>}
-      </div>
+          <MenuItem value="">
+            <em>--Select--</em>
+          </MenuItem>
+          {YEARS.map((y) => (
+            <MenuItem key={y} value={y}>
+              {y}
+            </MenuItem>
+          ))}
+        </TextField>
 
-      <div>
-        <label htmlFor="cgpa">CGPA:</label>
-        <input
+        {/* CGPA */}
+        <TextField
+          label="CGPA"
           type="number"
-          step="0.01"
-          id="cgpa"
-          name="cgpa"
           value={formData.cgpa}
-          onChange={handleChange}
+          onChange={(e) => handleChange("cgpa", e.target.value)}
+          inputProps={{ step: "0.01", min: 0, max: 10 }}
+          error={!!errors.cgpa}
+          helperText={errors.cgpa}
+          fullWidth
         />
-        {errors.cgpa && <span className="error">{errors.cgpa}</span>}
-      </div>
 
-      <div className="form-buttons">
-        <button type="submit">{editingStudent ? "Update" : "Save"}</button>
-        <button type="button" onClick={handleClear}>Clear</button>
-      </div>
-    </form>
+        {/* Action Buttons */}
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" color="primary" type="submit">
+            {editingStudent ? "Update" : "Save"}
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={handleClear}>
+            Clear
+          </Button>
+        </Stack>
+      </Stack>
+    </Paper>
   );
 }
